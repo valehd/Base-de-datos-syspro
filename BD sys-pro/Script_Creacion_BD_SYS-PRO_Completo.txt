@@ -1,0 +1,117 @@
+
+-- Script de creación de la base de datos SYS-PRO
+-- Incluye: tablas, claves primarias, foráneas, índices y restricciones
+
+DROP DATABASE IF EXISTS syspro;
+CREATE DATABASE syspro;
+USE syspro;
+
+-- Tabla Usuario
+CREATE TABLE Usuario (
+  id_usuario INT NOT NULL AUTO_INCREMENT,
+  nombre_usuario VARCHAR(50) NOT NULL,
+  contraseña_hash VARCHAR(255) NOT NULL,
+  rol ENUM('tecnico', 'administrador') NOT NULL,
+  nombre VARCHAR(50) NOT NULL,
+  apellido VARCHAR(50) NOT NULL,
+  telefono VARCHAR(20),
+  correo VARCHAR(100) NOT NULL,
+  PRIMARY KEY (id_usuario),
+  UNIQUE (nombre_usuario)
+);
+
+-- Tabla Proyecto
+CREATE TABLE Proyecto (
+  id_proyecto INT NOT NULL AUTO_INCREMENT,
+  cliente VARCHAR(100) NOT NULL,
+  nombre_proyecto VARCHAR(100) NOT NULL,
+  fecha_inicio DATE NOT NULL,
+  fecha_entrega DATE NOT NULL,
+  estado VARCHAR(20),
+  tipo_proyecto ENUM('largo', 'corto', 'flexible') NOT NULL DEFAULT 'largo',
+  PRIMARY KEY (id_proyecto)
+);
+
+-- Tabla Etapa
+CREATE TABLE Etapa (
+  id_etapa INT NOT NULL AUTO_INCREMENT,
+  id_proyecto INT NOT NULL,
+  nombre_etapa VARCHAR(100) NOT NULL,
+  estado_etapa ENUM('pendiente', 'en_proceso', 'finalizado') NOT NULL,
+  fecha_inicio DATE,
+  fecha_fin DATE,
+  horas_estimadas INT,
+  PRIMARY KEY (id_etapa),
+  INDEX (id_proyecto),
+  FOREIGN KEY (id_proyecto) REFERENCES Proyecto(id_proyecto)
+);
+
+-- Tabla Asignacion
+CREATE TABLE Asignacion (
+  id_asignacion INT NOT NULL AUTO_INCREMENT,
+  id_usuario INT NOT NULL,
+  id_etapa INT NOT NULL,
+  PRIMARY KEY (id_asignacion),
+  INDEX (id_etapa),
+  INDEX (id_usuario),
+  FOREIGN KEY (id_etapa) REFERENCES Etapa(id_etapa),
+  FOREIGN KEY (id_usuario) REFERENCES Usuario(id_usuario)
+);
+
+-- Tabla Bitacora
+CREATE TABLE Bitacora (
+  id_bitacora INT NOT NULL AUTO_INCREMENT,
+  id_usuario INT NOT NULL,
+  accion VARCHAR(255) NOT NULL,
+  fecha_hora DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  id_proyecto INT,
+  PRIMARY KEY (id_bitacora),
+  INDEX (id_usuario),
+  FOREIGN KEY (id_usuario) REFERENCES Usuario(id_usuario)
+);
+
+-- Tabla Comentario
+CREATE TABLE Comentario (
+  id_comentario INT NOT NULL AUTO_INCREMENT,
+  id_etapa INT,
+  id_usuario INT NOT NULL,
+  tipo VARCHAR(20) NOT NULL,
+  contenido TEXT NOT NULL,
+  fecha DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id_comentario),
+  INDEX (id_etapa),
+  INDEX (id_usuario),
+  FOREIGN KEY (id_etapa) REFERENCES Etapa(id_etapa),
+  FOREIGN KEY (id_usuario) REFERENCES Usuario(id_usuario)
+);
+
+-- Tabla RegistroHoras
+CREATE TABLE RegistroHoras (
+  id_registro INT NOT NULL AUTO_INCREMENT,
+  id_etapa INT NOT NULL,
+  id_usuario INT NOT NULL,
+  fecha DATE NOT NULL,
+  hora_inicio TIME NOT NULL,
+  hora_fin TIME,
+  horas_trabajadas DECIMAL(5,2),
+  comentario TEXT,
+  PRIMARY KEY (id_registro),
+  INDEX (id_etapa),
+  INDEX (id_usuario),
+  FOREIGN KEY (id_usuario) REFERENCES Usuario(id_usuario),
+  FOREIGN KEY (id_etapa) REFERENCES Etapa(id_etapa)
+);
+
+-- Tabla Sugerencia
+CREATE TABLE Sugerencia (
+  id_sugerencia INT NOT NULL AUTO_INCREMENT,
+  id_usuario INT NOT NULL,
+  id_etapa INT,
+  fecha_sugerida DATE NOT NULL,
+  motivo TEXT NOT NULL,
+  PRIMARY KEY (id_sugerencia),
+  INDEX (id_etapa),
+  INDEX (id_usuario),
+  FOREIGN KEY (id_usuario) REFERENCES Usuario(id_usuario),
+  FOREIGN KEY (id_etapa) REFERENCES Etapa(id_etapa)
+);

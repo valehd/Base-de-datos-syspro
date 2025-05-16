@@ -1,0 +1,163 @@
+-- Inserción de usuarios con contraseña hasheada (bcrypt)
+-- Roles: administrador y técnico
+-- Asume que los IDs comienzan en 1
+
+INSERT INTO Usuario (id_usuario, nombre_usuario, contraseña_hash, rol, nombre, apellido, telefono, correo) VALUES
+(1, 'carlos.ramirez', '$2b$10$sNjpvT0C3yoyQFxUywdak.WDnf80rdaracCcoJErjLNp/3E5Fgvl2', 'administrador', 'Carlos', 'Ramírez', '123456789', 'carlos@empresa.com'),
+(2, 'valentina.gomez', '$2b$10$ZC6e0P/5M3JbWqD50h5RzuVOB2V2J/4KchdSynp6JuVmg06eFpK6G', 'tecnico', 'Valentina', 'Gómez', '123456780', 'valentina@empresa.com'),
+(3, 'andres.perez', '$2b$10$cWBFR7/1Pnx1nyfundpjLeS0nA.KHlgRbUPALiiW602/00tvPVhmy', 'tecnico', 'Andrés', 'Pérez', '123456781', 'andres@empresa.com'),
+(4, 'camila.morales', '$2b$10$aHr1sK8KRZeaMTzBp5YbTuUeJqgBz23VIPGIV3qY6mphdjyUhAFvO', 'tecnico', 'Camila', 'Morales', '123456782', 'camila@empresa.com'),
+(5, 'diego.soto', '$2b$10$I.vScgb23HPuh8O.A91aSuRh/pP0msI6GQ7JfTl3dkm64uSUf0Byq', 'tecnico', 'Diego', 'Soto', '123456783', 'diego@empresa.com');
+
+
+
+-- Inserción de proyectos reales en inglés para SYS-PRO
+-- Adaptado a los estados oficiales del sistema: Completed, In Progress, Paused
+-- Se registra también la creación en la tabla Bitacora por el admin (id_usuario = 1)
+
+-- EuroLift - Automated Pallet Stacker
+INSERT INTO Proyecto (cliente, nombre_proyecto, fecha_inicio, fecha_entrega, estado, tipo_proyecto)
+VALUES ('EuroLift', 'Automated Pallet Stacker', '2025-03-04', '2025-04-12', 'Finalizado', 'largo');
+INSERT INTO Bitacora (id_usuario, accion, fecha_hora)
+VALUES (1, 'Created project Automated Pallet Stacker (ID: LAST_INSERT_ID())', NOW());
+
+-- PackTech Solutions - Robotic Arm for Packaging Line
+INSERT INTO Proyecto (cliente, nombre_proyecto, fecha_inicio, fecha_entrega, estado, tipo_proyecto)
+VALUES ('PackTech Solutions', 'Robotic Arm for Packaging Line', '2025-03-10', '2025-04-12', 'Finalizado', 'corto');
+INSERT INTO Bitacora (id_usuario, accion, fecha_hora)
+VALUES (1, 'Created project Robotic Arm for Packaging Line (ID: LAST_INSERT_ID())', NOW());
+
+-- OmniMaterials - Smart Conveyor Retrofit
+INSERT INTO Proyecto (cliente, nombre_proyecto, fecha_inicio, fecha_entrega, estado, tipo_proyecto)
+VALUES ('OmniMaterials', 'Smart Conveyor Retrofit', '2025-03-18', '2025-04-22', 'Finalizado', 'flexible');
+INSERT INTO Bitacora (id_usuario, accion, fecha_hora)
+VALUES (1, 'Created project Smart Conveyor Retrofit (ID: LAST_INSERT_ID())', NOW());
+
+-- SmartSort Ltd. - Automated Sorting Table
+INSERT INTO Proyecto (cliente, nombre_proyecto, fecha_inicio, fecha_entrega, estado, tipo_proyecto)
+VALUES ('SmartSort Ltd.', 'Automated Sorting Table', '2025-03-25', '2025-05-02', 'Finalizado', 'largo');
+INSERT INTO Bitacora (id_usuario, accion, fecha_hora)
+VALUES (1, 'Created project Automated Sorting Table (ID: LAST_INSERT_ID())', NOW());
+
+
+
+-- Inserción de etapas reales para los primeros 4 proyectos (ID: 1 a 4)
+-- Estados traducidos a inglés: 'finalizado' → 'Completed'
+-- Se asume que el ID del administrador es 1
+
+-- Proyecto 1: Automated Pallet Stacker (ID: 1)
+INSERT INTO Etapa (id_proyecto, nombre_etapa, estado_etapa, fecha_inicio, fecha_fin, horas_estimadas) VALUES
+(1, 'Design and Requirements', 'finalizado', '2025-03-04', '2025-03-10', 16),
+(1, 'Electrical Setup', 'finalizado', '2025-03-11', '2025-03-20', 32),
+(1, 'Robot Integration', 'finalizado', '2025-03-21', '2025-04-01', 40),
+(1, 'Final Testing & Delivery', 'finalizado', '2025-04-02', '2025-04-12', 24);
+INSERT INTO Bitacora (id_usuario, accion, fecha_hora) VALUES
+(1, 'Added stages to project Automated Pallet Stacker (ID: 1)', NOW());
+
+-- Proyecto 2: Robotic Arm for Packaging Line (ID: 2)
+INSERT INTO Etapa (id_proyecto, nombre_etapa, estado_etapa, fecha_inicio, fecha_fin, horas_estimadas) VALUES
+(2, 'Initial Design and Feasibility', 'finalizado', '2025-03-10', '2025-03-14', 20),
+(2, 'Mechanical Assembly', 'finalizado', '2025-03-15', '2025-03-22', 30),
+(2, 'Sensor and Control Setup', 'finalizado', '2025-03-23', '2025-04-03', 28),
+(2, 'Calibration & Delivery', 'finalizado', '2025-04-04', '2025-04-12', 24);
+INSERT INTO Bitacora (id_usuario, accion, fecha_hora) VALUES
+(1, 'Added stages to project Robotic Arm for Packaging Line (ID: 2)', NOW());
+
+-- Proyecto 3: Smart Conveyor Retrofit (ID: 3)
+INSERT INTO Etapa (id_proyecto, nombre_etapa, estado_etapa, fecha_inicio, fecha_fin, horas_estimadas) VALUES
+(3, 'Site Inspection and Mapping', 'finalizado', '2025-03-18', '2025-03-21', 16),
+(3, 'Component Procurement', 'finalizado', '2025-03-22', '2025-03-29', 20),
+(3, 'System Installation', 'finalizado', '2025-04-01', '2025-04-15', 36),
+(3, 'Operational Testing', 'finalizado', '2025-04-16', '2025-04-22', 28);
+INSERT INTO Bitacora (id_usuario, accion, fecha_hora) VALUES
+(1, 'Added stages to project Smart Conveyor Retrofit (ID: 3)', NOW());
+
+-- Proyecto 4: Automated Sorting Table (ID: 4)
+INSERT INTO Etapa (id_proyecto, nombre_etapa, estado_etapa, fecha_inicio, fecha_fin, horas_estimadas) VALUES
+(4, 'Client Brief and Layout Design', 'finalizado', '2025-03-25', '2025-03-29', 18),
+(4, 'Frame Construction and Motors', 'finalizado', '2025-04-01', '2025-04-12', 36),
+(4, 'Sensor Programming', 'finalizado', '2025-04-15', '2025-04-24', 30),
+(4, 'Testing and Delivery', 'finalizado', '2025-04-25', '2025-05-02', 24);
+INSERT INTO Bitacora (id_usuario, accion, fecha_hora) VALUES
+(1, 'Added stages to project Automated Sorting Table (ID: 4)', NOW());
+
+
+
+
+-- Inserción de asignaciones de técnicos a etapas (proyectos 1 al 4)
+-- Cada técnico ya debe existir con su id_usuario correspondiente
+-- Se registran también en la bitácora (id_usuario admin = 1)
+
+INSERT INTO Asignacion (id_usuario, id_etapa) VALUES
+(2, 1),   
+(3, 2),   
+(4, 3),  
+(5, 4),   
+(3, 5),   
+(2, 6),  
+(5, 7),   
+(4, 8),   
+(4, 9),   
+(3, 10), 
+(2, 11), 
+(5, 12),  
+(2, 13),  
+(3, 14),  
+(4, 15),  
+(5, 16); 
+
+INSERT INTO Bitacora (id_usuario, accion, fecha_hora)
+VALUES 
+(1, 'Assigned technicians to stages of projects 1 to 4', NOW());
+
+
+
+
+-- Inserción de comentarios asociados a las etapas de los primeros 4 proyectos
+-- Tipos: avance, retraso, comentario, nota, bloqueo
+-- Se asume que los usuarios y etapas ya existen
+
+INSERT INTO Comentario (id_etapa, id_usuario, tipo, contenido, fecha) VALUES
+(1, 2, 'avance', 'Design approved by client without changes.', '2025-03-10 12:00:00'),
+(2, 3, 'avance', 'Wiring completed ahead of schedule.', '2025-03-19 16:30:00'),
+(3, 4, 'retraso', 'Integration took slightly longer due to calibration issues.', '2025-04-01 18:00:00'),
+(4, 5, 'nota', 'Final tests passed. Delivery scheduled.', '2025-04-11 09:00:00'),
+(5, 3, 'avance', 'Client approved concept quickly.', '2025-03-14 11:00:00'),
+(6, 2, 'comentario', 'Assembly was completed with no issues.', '2025-03-22 15:30:00'),
+(7, 5, 'retraso', 'Delay due to missing sensor component.', '2025-04-03 17:45:00'),
+(8, 4, 'nota', 'Calibration extended by two days but successful.', '2025-04-11 16:00:00'),
+(9, 4, 'comentario', 'Site mapping completed. No obstacles found.', '2025-03-21 13:00:00'),
+(10, 3, 'bloqueo', 'Delay due to supplier backlog.', '2025-03-26 10:45:00'),
+(11, 2, 'comentario', 'Started installation after materials arrived.', '2025-04-02 09:15:00'),
+(11, 2, 'bloqueo', 'Power supply issue halted work for 2 days.', '2025-04-08 14:00:00'),
+(12, 5, 'avance', 'Testing finalized. System handed over.', '2025-04-22 17:00:00'),
+(13, 2, 'comentario', 'Client brief approved. Started with layout design.', '2025-03-28 10:30:00'),
+(14, 3, 'avance', 'Mechanical assembly went smoothly.', '2025-04-10 15:45:00'),
+(15, 4, 'avance', 'All sensors calibrated and tested successfully.', '2025-04-23 17:00:00'),
+(16, 5, 'nota', 'Delivery and installation completed on schedule.', '2025-05-02 12:00:00');
+
+
+
+
+-- Inserción de registros de horas trabajadas por técnicos en las etapas 1 a 16
+-- Se asume que la tabla RegistroHoras tiene los campos: id_etapa, id_usuario, fecha, hora_inicio, hora_fin, horas_trabajadas, comentario
+
+INSERT INTO RegistroHoras (id_etapa, id_usuario, fecha, hora_inicio, hora_fin, horas_trabajadas, comentario) VALUES
+(1, 2, '2025-03-05', '09:00:00', '13:00:00', 4.00, 'Initial planning'),
+(2, 3, '2025-03-12', '08:30:00', '16:30:00', 8.00, 'Wiring and layout'),
+(3, 4, '2025-03-23', '09:00:00', '17:00:00', 8.00, 'Integration session 1'),
+(4, 5, '2025-04-05', '10:00:00', '14:00:00', 4.00, 'Testing round 1'),
+(5, 3, '2025-03-11', '09:00:00', '13:00:00', 4.00, 'Feasibility analysis'),
+(6, 2, '2025-03-17', '10:00:00', '16:00:00', 6.00, 'Mechanical setup'),
+(7, 5, '2025-03-28', '08:30:00', '15:30:00', 7.00, 'Sensor wiring'),
+(8, 4, '2025-04-09', '09:00:00', '13:00:00', 4.00, 'Final calibration'),
+(9, 4, '2025-03-19', '09:00:00', '13:00:00', 4.00, 'On-site inspection'),
+(10, 3, '2025-03-24', '10:00:00', '16:00:00', 6.00, 'Ordering components'),
+(11, 2, '2025-04-03', '08:30:00', '14:30:00', 6.00, 'Installing hardware'),
+(12, 5, '2025-04-20', '09:30:00', '13:30:00', 4.00, 'Final validation'),
+(13, 2, '2025-03-26', '09:00:00', '13:00:00', 4.00, 'Initial sketches'),
+(14, 3, '2025-04-03', '10:00:00', '16:00:00', 6.00, 'Frame build'),
+(15, 4, '2025-04-17', '09:00:00', '13:00:00', 4.00, 'Programming logic'),
+(16, 5, '2025-04-30', '08:00:00', '12:00:00', 4.00, 'Final test and transport');
+
+
