@@ -1,4 +1,4 @@
-Proyecto SYS-PRO - Base de Datos Relacional (MySQL)
+Proyecto Base de Datos Relacional (MySQL)
 
 1. Estructura general:
 - El sistema incluye usuarios (técnicos y administradores), proyectos, etapas, asignaciones, registros de horas, comentarios y bitácora de acciones.
